@@ -1,0 +1,208 @@
+services:
+  # ===============================
+  # 🐍 Microservicio SOLICITUDES
+  # ===============================
+  solicitudes:
+    build:
+      context: ./Microservicios/Microservicio_3
+      dockerfile: Dockerfile
+    container_name: ms_solicitudes
+    ports:
+      - "5007:5007"
+    environment:
+      - DB_HOST=db_solicitudes
+      - DB_PORT=3306
+      - DB_NAME=solicitudes_db
+      - DB_USER=root
+      - DB_PASSWORD=4787
+    depends_on:
+      db_solicitudes:
+        condition: service_healthy  
+
+  db_solicitudes:
+    image: mariadb:10.6
+    container_name: db_solicitudes
+    environment:
+      - MYSQL_ROOT_PASSWORD=4787
+      - MYSQL_DATABASE=solicitudes_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - solicitudes_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p4787"] 
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s  
+
+  # ===============================
+  # 🐍 Microservicio NOTIFICACIONES
+  # ===============================
+  notificaciones:
+    build:
+      context: ./Microservicios/Microservicio_1
+      dockerfile: Dockerfile
+    container_name: ms_notificaciones
+    ports:
+      - "5005:5005"
+    environment:
+      - DB_HOST=db_notificaciones
+      - DB_PORT=3306
+      - DB_NAME=notificaciones_db
+      - DB_USER=root
+      - DB_PASSWORD=4787
+    depends_on:
+      db_notificaciones:
+        condition: service_healthy  
+
+  db_notificaciones:
+    image: mariadb:10.6
+    container_name: db_notificaciones
+    environment:
+      - MYSQL_ROOT_PASSWORD=4787
+      - MYSQL_DATABASE=notificaciones_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - notificaciones_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p4787"] 
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s 
+
+  # ===============================
+  # ☕ Microservicio ADMINS
+  # ===============================
+  admins:
+    build:
+      context: ./Microservicios\AdminMicroservicio-main\AdminMicroservicio-main\Usuarios 
+      dockerfile: Dockerfile
+    container_name: ms_admins
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db_admins:3306/admin_db  
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=4787
+    depends_on:
+      db_admins:
+        condition: service_healthy  
+
+  db_admins:
+    image: mariadb:10.6
+    container_name: db_admins
+    environment:
+      - MYSQL_ROOT_PASSWORD=4787
+      - MYSQL_DATABASE=admin_db
+    ports:
+      - "3309:3306"
+    volumes:
+      - admins_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p4787"] 
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s 
+
+  # ===============================
+  # ☕ Microservicio USERS
+  # ===============================
+  users:
+    build:
+      context: ./Microservicios/MicroServiceUsers-main/MicroServiceUsers-main/Usuarios
+      dockerfile: Dockerfile
+    container_name: ms_users
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db_users:3306/usuario_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=4787
+    depends_on:
+      db_users:
+        condition: service_healthy  
+
+  db_users:
+    image: mariadb:10.6
+    container_name: db_users
+    environment:
+      - MYSQL_ROOT_PASSWORD=4787
+      - MYSQL_DATABASE=usuario_db
+    ports:
+      - "3310:3306"
+    volumes:
+      - users_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p4787"] 
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s 
+
+  # ===============================
+  # ☕ Microservicio LUGARES
+  # ===============================
+  lugares:
+    build:
+      context: ./Microservicios\LugarMicroservicio-main\LugarMicroservicio-main
+      dockerfile: Dockerfile
+    container_name: ms_lugares
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://db_lugares:3306/lugar_db  
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=4787
+    depends_on:
+      db_lugares:
+        condition: service_healthy 
+
+  db_lugares:
+    image: mariadb:10.6
+    container_name: db_lugares
+    environment:
+      - MYSQL_ROOT_PASSWORD=4787
+      - MYSQL_DATABASE=lugar_db 
+    ports:
+      - "3311:3306"
+    volumes:
+      - lugares_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p4787"] 
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s 
+
+  # ===============================
+  # 🤖 Bridge API (Agente central)
+  # ===============================
+  bridge_api:
+    build:
+      context: ./Agente/Agente
+      dockerfile: Dockerfile
+    container_name: bridge_api
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./Agente/Agente:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - GOOGLE_API_KEY=AIzaSyBnkvmMzgrxBBU5MojGCvaKYEiEJDRuljA
+    depends_on:
+      - solicitudes
+      - notificaciones
+      - admins
+      - users
+      - lugares
+
+volumes:
+  solicitudes_data:
+  notificaciones_data:
+  admins_data:
+  users_data:
+  lugares_data:
