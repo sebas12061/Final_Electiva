@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,6 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/places")
 @Tag(name = "Lugares", description = "Operaciones relacionadas con los lugares")
+@CrossOrigin  // De tu compañera
 public class PlaceController {
 
     private final PlaceService service;
@@ -63,7 +65,9 @@ public class PlaceController {
     @ApiResponse(responseCode = "201", description = "Lugar creado exitosamente")
     @PostMapping
     public ResponseEntity<Place> createPlace(@RequestBody Place place) {
-        return new ResponseEntity<>(service.save(place), HttpStatus.CREATED);
+        // Cuando se crea un lugar vía API, también creamos la solicitud en microservicio de solicitudes
+        Place saved = service.saveWithSolicitud(place);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     // Actualizar un lugar existente
@@ -118,7 +122,7 @@ public class PlaceController {
             @ApiResponse(responseCode = "200", description = "Lugar aceptado exitosamente"),
             @ApiResponse(responseCode = "400", description = "No se pudo aceptar el lugar (ya estaba aceptado o no existe)")
     })
-    @PostMapping("/{placeId}/accept")
+    @PostMapping("/{placeId}/aceptada")
     public ResponseEntity<String> acceptPlace(@PathVariable Long placeId) {
         if (service.acceptPlace(placeId)) {
             return new ResponseEntity<>("Lugar aceptado.", HttpStatus.OK);
@@ -133,7 +137,7 @@ public class PlaceController {
             @ApiResponse(responseCode = "200", description = "Lugar rechazado exitosamente"),
             @ApiResponse(responseCode = "400", description = "No se pudo rechazar el lugar (ya estaba rechazado o no existe)")
     })
-    @PostMapping("/{placeId}/reject")
+    @PostMapping("/{placeId}/rechazada")
     public ResponseEntity<String> rejectPlace(@PathVariable Long placeId) {
         if (service.rejectPlace(placeId)) {
             return new ResponseEntity<>("Lugar rechazado.", HttpStatus.OK);
@@ -143,27 +147,28 @@ public class PlaceController {
     }
 
     // Mostrar los lugares pendientes
-    @Operation(summary = "Mostrar los lugares pendientes", description = "Devuelve una lista con los lugares que están en estado PENDIENTE")
+    @Operation(summary = "Mostrar los lugares pendientes", description = "Devuelve una lista con los lugares que están en estado PENDING")
     @ApiResponse(responseCode = "200", description = "Lista de lugares pendientes encontrada")
     @ApiResponse(responseCode = "404", description = "No se encontraron lugares pendientes")
-    @GetMapping("/pending")
+    @GetMapping("/pendientes")  // Cambia de "/pending" a "/pendientes"
     public ResponseEntity<List<Place>> getPendingPlaces() {
         List<Place> allPlaces = service.findAll();
         List<Place> pendingPlaces = allPlaces.stream()
-                .filter(place -> place.getStatus() == PlaceStatus.PENDING)
+                .filter(place -> place.getStatus() == PlaceStatus.pendiente)  // Asegúrate de que sea pendiete
                 .toList();
         return new ResponseEntity<>(pendingPlaces, HttpStatus.OK);
     }
+
 
     // Mostrar los lugares aceptados
     @Operation(summary = "Mostrar los lugares aceptados", description = "Devuelve una lista con los lugares que están en estado ACEPTADO")
     @ApiResponse(responseCode = "200", description = "Lista de lugares aceptados encontrada")
     @ApiResponse(responseCode = "404", description = "No se encontraron lugares aceptados")
-    @GetMapping("/accepted")
+    @GetMapping("/aceptada")
     public ResponseEntity<List<Place>> getAcceptedPlaces() {
         List<Place> allPlaces = service.findAll();
         List<Place> acceptedPlaces = allPlaces.stream()
-                .filter(place -> place.getStatus() == PlaceStatus.ACCEPTED)
+                .filter(place -> place.getStatus() == PlaceStatus.aceptada)
                 .toList();
         return !acceptedPlaces.isEmpty() ?
                 new ResponseEntity<>(acceptedPlaces, HttpStatus.OK) :
@@ -174,14 +179,26 @@ public class PlaceController {
     @Operation(summary = "Mostrar los lugares rechazados", description = "Devuelve una lista con los lugares que están en estado RECHAZADO")
     @ApiResponse(responseCode = "200", description = "Lista de lugares rechazados encontrada")
     @ApiResponse(responseCode = "404", description = "No se encontraron lugares rechazados")
-    @GetMapping("/rejected")
+    @GetMapping("/rechazada")
     public ResponseEntity<List<Place>> getRejectedPlaces() {
         List<Place> allPlaces = service.findAll();
         List<Place> rejectedPlaces = allPlaces.stream()
-                .filter(place -> place.getStatus() == PlaceStatus.REJECTED)
+                .filter(place -> place.getStatus() == PlaceStatus.rechazada)
                 .toList();
         return !rejectedPlaces.isEmpty() ?
                 new ResponseEntity<>(rejectedPlaces, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Obtener lugares con solicitudes pendientes (nuestra adición)
+    @GetMapping("/con-solicitudes")
+    public ResponseEntity<Map<String, Object>> getPlacesWithSolicitudes() {
+        List<Place> places = service.findAll();
+        List<Map<String, Object>> solicitudes = service.obtenerSolicitudesPendientes();
+        Map<String, Object> response = Map.of(
+            "lugares", places,
+            "solicitudes_pendientes", solicitudes
+        );
+        return ResponseEntity.ok(response);
     }
 }

@@ -24,8 +24,9 @@ def crear():
     if not data or "nombre" not in data or "categoria" not in data or "ubicacion" not in data:
         return jsonify({"error": "Datos inválidos"}), 400
     return jsonify(service.crear(data)), 201
-    
+
 # Aprobar una solicitud
+@solicitud_bp.route("/<int:id>/aprobar", methods=["PUT"])
 def aprobar(id):
     resultado = service.aprobar(id)
     if "error" in resultado:

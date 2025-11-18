@@ -19,18 +19,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "lugar")
+
 public class Place {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // autoincremental
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
     @Column(length = 500)
     private String description;
-
     @Enumerated(EnumType.STRING)
     private PlaceStatus status;
 }

@@ -1,0 +1,430 @@
+/* ===================== */
+/* ESTILOS GENERALES     */
+/* ===================== */
+body {
+    margin: 0; /* Quito márgenes por defecto */
+    font-family: Arial, sans-serif; /* Fuente limpia y legible */
+    background: #f4f0e9; /* Fondo general en tono crema */
+}
+/* ===================== */
+/* ESTADO DE MAYA HEADER */
+/* ===================== */
+.app-header .status-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 1;        /* Permite que se reduzca si falta espacio */
+    overflow: hidden;       /* Evita que se salga del header */
+    text-overflow: ellipsis; /* Agrega "..." si no cabe el texto */
+    white-space: nowrap;     /* Mantiene todo en una sola línea */
+}
+.app-header .status-container p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* ===================== */
+/* HEADER SUPERIOR FIJO  */
+/* ===================== */
+.app-header {
+    position: fixed; /* Siempre visible arriba */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ocupar todo el ancho */
+    height: 60px;
+    background: #2f4368; /* Azul corporativo */
+    color: white;
+    padding: 10px 15px;
+    display: flex; /* Para alinear elementos en fila */
+    justify-content: space-between; /* Título a la izquierda y estado a la derecha */
+    align-items: center; /* Centrado vertical */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4); /* Sombra debajo */
+    z-index: 1000; /* Siempre encima del resto */
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #28a745; /* Verde para mostrar "online" */
+    border-radius: 50%; /* Redondo */
+    margin-right: 5px;
+}
+
+/* ===================== */
+/* LAYOUT GENERAL        */
+/* ===================== */
+.app-container {
+    display: flex; /* Sidebar y chat en la misma fila */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* Espacio entre chat y sidebar */
+    padding: 20px;
+    margin-top: 80px; /* Dejo espacio para que no tape el header */
+}
+
+/* ===================== */
+/* CHAT PRINCIPAL        */
+/* ===================== */
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 600px;       /* Más ancho en desktop */
+    max-width: 90%;     /* No se desborda en pantallas pequeñas */
+    height: 600px;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.chat-container {
+    flex: 1; /* Que ocupe todo lo que queda */
+    padding: 15px;
+    overflow-y: auto; /* Scroll si hay muchos mensajes */
+    background: #f9f7f3; /* Fondo suave */
+}
+
+/* Mensajes dentro del chat */
+.chat-box .mensaje {
+    margin: 12px 0;
+    padding: 12px 15px;
+    border-radius: 12px;
+    max-width: 70%; /* No ocupar todo el ancho */
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.chat-box .usuario {
+    background: #2f4368; /* Azul para mensajes del usuario */
+    color: white;
+    margin-left: auto; /* Se alinean a la derecha */
+    text-align: right;
+}
+
+.chat-box .agente {
+    background: #e6ddc6; /* Beige para Maya */
+    color: black;
+    margin-right: auto; /* Se alinean a la izquierda */
+    text-align: left;
+}
+
+/* Input del chat */
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ccc; /* Separador */
+    background: #fff;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.chat-input button {
+    background: #2f4368;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* ===================== */
+/* SIDEBAR LATERAL       */
+/* ===================== */
+.sidebar {
+    width: 250px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Botones rápidos */
+.quick-btn {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    background: #f4f0e9;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.quick-btn:hover {
+    background: #ddd;
+}
+
+/* ===================== */
+/* TARJETAS DE LUGARES   */
+/* ===================== */
+.card-lugar {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+.card-lugar h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    color: #2f4368;
+}
+.card-lugar .estrella {
+    color: orange; /* Valoración destacada */
+    font-weight: bold;
+}
+.card-tags {
+    margin-top: 8px;
+}
+.tag {
+    display: inline-block;
+    background: #f4f0e9;
+    border-radius: 6px;
+    padding: 3px 8px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+/* ===================== */
+/* BLOQUES EN LA SIDEBAR */
+/* ===================== */
+.sidebar-section {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f9f7f3;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.sidebar-section h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: #2f4368;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Botones de búsquedas recientes */
+.recent-searches button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+    background: #e6ddc6;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+}
+.recent-searches button:hover {
+    background: #d4ccb8;
+}
+
+/* Estado de Maya */
+.estado-maya p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+.estado-maya span {
+    font-weight: bold;
+    color: #2f4368;
+}
+
+/* ===================== */
+/* CABECERA DEL CHAT     */
+/* ===================== */
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #2f4368; /* Azul igual que el header */
+    color: white;
+    padding: 12px 15px;
+    border-bottom: 2px solid #223354;
+}
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Foto redonda */
+    background: white;
+    object-fit: cover;
+}
+.chat-info h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+.chat-info p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* ===================== */
+/* SWITCHES PERSONALIZ.  */
+/* ===================== */
+.switch {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    cursor: pointer;
+    gap: 10px;
+}
+.switch input {
+    display: none; /* Oculto el checkbox nativo */
+}
+.slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: 0.4s;
+}
+.slider::before {
+    content: "";
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+/* Cuando el switch está activado */
+.switch input:checked + .slider {
+    background-color: #2f4368; /* Azul del header */
+}
+.switch input:checked + .slider::before {
+    transform: translateX(20px); /* Mueve el puntito */
+}
+.switch-text {
+    font-size: 14px;
+    color: #333;
+}
+
+/* ===================== */
+/* RESPONSIVE DESIGN     */
+/* ===================== */
+/* Ajustes para tablets */
+@media (max-width: 1024px) {
+    .app-container {
+        flex-direction: column; /* Pongo chat y sidebar en columna */
+        align-items: center;
+    }
+    .chat-wrapper {
+        width: 90%;
+        height: 500px;
+    }
+    .sidebar {
+        width: 90%;
+        margin-top: 20px;
+    }
+}
+/* Ajustes para celulares */
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+        text-align: center;
+    }
+    .app-header h1 {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+    .app-container {
+        margin-top: 100px; /* Más espacio porque header crece */
+        padding: 10px;
+    }
+    .chat-wrapper {
+        width: 100%;
+        height: 450px;
+    }
+    .chat-input input {
+        font-size: 13px;
+        padding: 10px;
+    }
+    .chat-input button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    .sidebar {
+        width: 100%;
+    }
+}
+/* Celulares muy pequeños */
+@media (max-width: 480px) {
+    .chat-wrapper {
+        height: 400px;
+    }
+    .chat-box .mensaje {
+        font-size: 13px;
+        padding: 10px;
+    }
+    .sidebar-section h3 {
+        font-size: 14px;
+    }
+    .quick-btn {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap; /* Evita que se rompa en partes raras */
+}
+
+.contenedor-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.card-respuesta {
+    background: #e3dac9;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 250px;
+}
+
+.card-respuesta h4 {
+    margin: 0 0 6px 0;
+    color: #2b2b2b;
+}
+
+.card-respuesta p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+}
+
+/* Colores personalizados por módulo */
+.card-lugares { background: #e8f5e9; border-left: 5px solid #2e7d32; }
+.card-notificaciones { background: #fff3e0; border-left: 5px solid #ef6c00; }
+
+
+@media (max-width: 480px) {
+    .status {
+        flex-direction: column; /* Texto debajo del puntito */
+        align-items: center;
+        gap: 2px;
+        font-size: 13px;
+    }
+}
+

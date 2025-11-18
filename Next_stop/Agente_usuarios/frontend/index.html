@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lugares Aceptados - Usuario IA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Header fijo -->
+<header class="app-header">
+    <h1>📖 Maya - Usuario IA</h1>
+    <div class="status">
+        <span class="status-dot"></span> Usuario IA Online para usuarios
+    </div>
+</header>
+
+<!-- Contenido -->
+<div class="app-container">
+    <!-- Chat en cuadrado -->
+    <div class="chat-wrapper">
+        <!-- Cabecera del chat -->
+        <div class="chat-header">
+            <img src="Maya_IA.png" alt="Maya_IA" class="chat-avatar">
+            <div class="chat-info">
+                <h2>Usuario - Tu asistente</h2>
+                <p>Acceso limitado a lugares aceptados y notificaciones</p>
+            </div>
+        </div>
+
+        <main class="chat-container">
+            <div id="chat-box" class="chat-box">
+                <!-- Usuario -->
+                <div class="mensaje usuario">
+                    📍 Muéstrame lugares
+                </div>
+
+                <!-- Agente -->
+                <div class="mensaje agente">
+                    Aquí tienes los lugares disponibles.
+                </div>
+            </div>
+        </main>
+
+        <!-- Input -->
+        <footer class="chat-input">
+            <input type="text" id="mensaje" placeholder="Conoce tu próximo destino turístico o dile a Maya que te ayude con tu gestión de notificaciones..." />
+            <button id="enviar">➤</button>
+        </footer>
+    </div>
+
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+        <h3>🚀 Acciones Rápidas</h3>
+        <button class="quick-btn">📍 Ver lugar "Parqué del café"</button>
+        <button class="quick-btn">🔔 Ver notificaciones</button>
+
+        <!-- Búsquedas recientes -->
+        <div class="sidebar-section">
+            <h3>🕒 Búsquedas Recientes</h3>
+            <div class="recent-searches">
+                <button>Lugares aceptados Madrid</button>
+                <button>Notificaciones recientes</button>
+            </div>
+        </div>
+
+        <!-- Estado del Usuario -->
+        <div class="sidebar-section">
+            <h3>🧠 Estado del Usuario</h3>
+            <div class="estado-usuario">
+                <p>Acceso limitado: <span>Sí</span></p>
+                <p>Lugares visibles: <span>Aceptados</span></p>
+                <p>Notificaciones: <span>Disponibles</span></p>
+            </div>
+        </div>
+    </aside>
+</div>
+<script src="scripts.js"></script>
+</body>
+</html>

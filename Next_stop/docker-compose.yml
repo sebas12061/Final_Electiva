@@ -200,6 +200,25 @@ services:
       - users
       - lugares
 
+  # ===============================
+  # 🤖 Bridge API (Agente Usuarios)
+  # ===============================
+  bridge_api_usuarios:
+    build:
+      context: ./Agente_usuarios
+      dockerfile: Dockerfile
+    container_name: bridge_api_users
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./Agente_usuarios:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - GOOGLE_API_KEY=AIzaSyBnkvmMzgrxBBU5MojGCvaKYEiEJDRuljA
+    depends_on:
+      - notificaciones
+      - lugares
+
 volumes:
   solicitudes_data:
   notificaciones_data:
